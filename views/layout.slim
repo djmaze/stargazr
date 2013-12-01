@@ -1,0 +1,21 @@
+doctype html
+html
+  head
+    title Get notifications for new Github releases - Stargazer
+    meta http-equiv="Content-Type" content="text/html; charset=utf-8"
+    -#script type="text/javascript" src="/vendor/bootstrap/js/bootstrap.min.js"
+    link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css"
+    link rel="stylesheet" href="/vendor/font-awesome/css/font-awesome.min.css"
+  body
+    .container
+      .row
+        .col-lg-12
+          - if @flash.present?
+            .alert.alert-danger
+              - case @flash
+              - when 'missing_input'
+                | Please fill out all fields.
+              - when 'already_registered'
+                | You are already registered!
+          .jumbotron
+            == yield

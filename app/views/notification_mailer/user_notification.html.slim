@@ -1,0 +1,26 @@
+doctype html
+html 
+  body style='font-family: "Helvetica Neue", Helvetica, Arial, sans-serif'
+    header style="margin-bottom: 2em"
+      | Hey #{user['username']}, I've found some new Github releases for you!
+
+    .repositories style="margin-bottom: 2em"
+      - repositories.collect do |repository|
+        .repository style="clear: left; margin-bottom: 1em" 
+          .repository_name style="font-weight: bold"
+             = repository.full_name
+          a.release href="https://github.com/#{repository.full_name}/releases/tag/#{repository['latest_tag_name']}"
+            .tag_name style="float: left; width: 7em"
+              = repository['latest_tag_name']
+            - if repository.release_name.present?
+              .release_name= repository.release_name
+
+    footer style="clear: both"
+      p Yours truly, 
+      p Stargazer
+      p
+      p 
+        | (Sorry, no one-click opt-out yet.
+        a href="mailto:#{ENV['UNSUBSCRIBE_EMAIL']}?subject=Unsubscribe #{user['username']}" 
+        | Send a mail with your username to #{ENV['UNSUBSCRIBE_EMAIL']}
+        | )
