@@ -1,18 +1,9 @@
-require 'database'
+class User
+  include Guacamole::Model
 
-class User < Database
-  def self.setup_indices
-    collection = self.new.collection
-    unless collection.indices.detect {|index| index.on == :username }
-      collection.add_index :hash, on: [:username], unique: true
-    end
-  end
-
-  #def last_notified_at
-    #document['last_notified_at'].presence && Time.parse(document['last_notified_at'])
-  #end
-
-  def collection
-    database['users']
-  end
+  attribute :username, String
+  attribute :email, String
+  attribute :last_checked_at, DateTime
+  attribute :last_notified_at, DateTime
+  attribute :updated_at, DateTime
 end

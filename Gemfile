@@ -10,7 +10,7 @@ gem 'faraday-http-cache'
 gem 'dalli'
 
 # Storage
-gem "ashikawa-core", "~> 0.9"
+gem 'guacamole', git: 'https://github.com/triAGENS/guacamole.git'
 
 # Mails
 gem 'mail'

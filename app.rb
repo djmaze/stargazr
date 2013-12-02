@@ -1,12 +1,10 @@
-require 'sinatra'
-require 'slim'
-require 'ashikawa-core'
+require 'bundler'
 require 'active_support/core_ext/string'
 require 'pry'
+require 'guacamole'
 
-$:.unshift 'app/models'
-require 'user'
 ENV['RACK_ENV'] ||= 'development'
+Bundler.require(:default, :development)
 Dotenv.load ".env.#{ENV['RACK_ENV']}"
 
 Mail.delivery_method.settings = {
@@ -18,26 +16,34 @@ Mail.delivery_method.settings = {
   domain: ENV['SMTP_DOMAIN']
 }
 
-configure do
-  set :public_folder, Proc.new { File.join(root, "static") }
-end
+# FIXME: Put this into Guacamole::Collection
+module Guacamole::Collection
+  included do
+    include ClassMethods
+  end
 
-User.setup_indices
-users = User.new.collection
+  module ClassMethods
+    def ensure_hash_index(options={})
+      on = Array.wrap options[:on]
 
-get '/' do
-  @flash = params[:flash]
-  slim :signup
-end
-
-post '/signup' do
-  username, email = params.values_at :username, :email
-  redirect to('/?flash=missing_input') unless username.present? && email.present?
-
-  if users.query.by_example(username: username).length > 0
-    redirect to('/?flash=already_registered')
-  else
-    users.create_document username: params[:username], email: params[:email]
-    slim :signed_up
+      unless connection.indices.detect {|index| index.on == on }
+        connection.add_index :hash, on: on, unique: options[:unique]
+      end
+    end
   end
 end
+
+ENV['GUACAMOLE_ENV'] = ENV['RACK_ENV']
+Guacamole.configure do |config|
+  logger = Logger.new("log/#{ENV['GUACAMOLE_ENV']}.log")
+  logger.level = 1
+  config.logger = logger
+
+  config.load File.join(File.dirname(__FILE__), 'config', 'guacamole.yml')
+end
+
+$:.unshift 'app/models'
+require 'user'
+require 'users_collection'
+require 'repository'
+require 'repositories_collection'
