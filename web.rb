@@ -2,8 +2,13 @@ $:.unshift '.'
 require 'sinatra'
 require 'app'
 require 'slim'
+require 'rack/csrf'
 
 configure do
+  # CSRF protection, see http://stackoverflow.com/a/11451231/1389203
+  enable :sessions
+  use Rack::Csrf, :raise => true
+
   set :public_folder, Proc.new { File.join(root, "static") }
 end
 
@@ -21,5 +26,11 @@ post '/signup' do
   else
     users.create_document username: params[:username], email: params[:email]
     slim :signed_up
+  end
+end
+
+helpers do
+  def csrf_tag
+    Rack::Csrf.csrf_tag(env)
   end
 end

@@ -3,6 +3,7 @@ source 'https://rubygems.org'
 # Sinatra
 gem 'sinatra', require: false
 gem 'slim'
+gem 'rack_csrf'
 
 # Github API w/ caching
 gem 'octokit'
