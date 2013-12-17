@@ -1,5 +1,6 @@
-require 'app'
+$:.unshift '.'
 require 'sinatra'
+require 'app'
 require 'slim'
 
 configure do
