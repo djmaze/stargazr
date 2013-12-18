@@ -21,10 +21,11 @@ post '/signup' do
   username, email = params.values_at :username, :email
   redirect to('/?flash=missing_input') unless username.present? && email.present?
 
-  if users.query.by_example(username: username).length > 0
+  if UsersCollection.by_example(username: username).any?
     redirect to('/?flash=already_registered')
   else
-    users.create_document username: params[:username], email: params[:email]
+    user = User.new username: params[:username], email: params[:email]
+    UsersCollection.save user
     slim :signed_up
   end
 end
