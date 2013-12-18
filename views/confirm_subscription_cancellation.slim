@@ -1,0 +1,7 @@
+#cancel-form
+  h2 Cancel your subscription
+  p You won't get any more notifications. Sure?
+  form method="post"
+    == csrf_tag
+    .form-group
+      input type="submit" value="Yes, unsubscribe" class="btn btn-primary btn-lg"

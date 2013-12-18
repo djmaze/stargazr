@@ -12,10 +12,6 @@ configure do
   set :public_folder, Proc.new { File.join(root, "static") }
 end
 
-def redirect_back_with_error(message)
-  session[:flash] = message
-  redirect to '/'
-end
 
 get '/' do
   @flash = session.delete(:flash)
@@ -30,6 +26,31 @@ post '/signup' do
   user = User.new username: params[:username], email: params[:email]
   UsersCollection.save user
   slim :signed_up
+end
+
+get '/cancel/:username' do
+  return unless get_user_or_redirect
+
+  slim :confirm_subscription_cancellation
+end
+
+post '/cancel/:username' do
+  return unless user = get_user_or_redirect
+
+  UsersCollection.delete user
+  slim :subscription_cancelled
+end
+
+def redirect_back_with_error(message)
+  session[:flash] = message
+  redirect to '/'
+end
+
+def get_user_or_redirect
+  user = UsersCollection.by_example(username: params[:username]).first
+  redirect_back_with_error('not_registered') and return false unless user.present?
+
+  user
 end
 
 helpers do

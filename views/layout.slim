@@ -17,5 +17,7 @@ html
                 | Please fill out all fields.
               - when 'already_registered'
                 | You are already registered!
+              - when 'not_registered'
+                | That username is not registered (anymore)!
           .jumbotron
             == yield
