@@ -12,22 +12,24 @@ configure do
   set :public_folder, Proc.new { File.join(root, "static") }
 end
 
+def redirect_back_with_error(message)
+  session[:flash] = message
+  redirect to '/'
+end
+
 get '/' do
-  @flash = params[:flash]
+  @flash = session.delete(:flash)
   slim :signup
 end
 
 post '/signup' do
   username, email = params.values_at :username, :email
-  redirect to('/?flash=missing_input') unless username.present? && email.present?
+  redirect_back_with_error('missing_input') and return unless username.present? && email.present?
+  redirect_back_with_error('already_registered') and return if UsersCollection.by_example(username: username).any?
 
-  if UsersCollection.by_example(username: username).any?
-    redirect to('/?flash=already_registered')
-  else
-    user = User.new username: params[:username], email: params[:email]
-    UsersCollection.save user
-    slim :signed_up
-  end
+  user = User.new username: params[:username], email: params[:email]
+  UsersCollection.save user
+  slim :signed_up
 end
 
 helpers do
