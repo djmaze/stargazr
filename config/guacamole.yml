@@ -1,7 +1,10 @@
-development:
+development: &development
   protocol: 'http'
   host: 'localhost'
   port: 8529
   password: ''
   username: ''
   database: 'stargazer'
+
+production:
+  <<: *development
