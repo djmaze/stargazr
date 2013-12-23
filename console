@@ -1,0 +1,2 @@
+#!/bin/bash
+bundle exec pry -r bundler -e "Bundler.setup; $:.unshift '.'; require 'app'"
