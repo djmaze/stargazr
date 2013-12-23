@@ -31,7 +31,7 @@ UsersCollection.all.each do |user|
     unless repository.fresh?
       puts "Updating #{repository_data.full_name}"
       repository.update 
-      repository.persisted? ? RepositoriesCollection.replace(repository) : RepositoriesCollection.save(repository)
+      RepositoriesCollection.save(repository)
     end
     repository if repository.latest_tag_date.present? && repository.new_tag_since?(user.last_checked_at)
   end.compact
