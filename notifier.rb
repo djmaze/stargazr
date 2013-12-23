@@ -10,8 +10,10 @@ end
 
 # Set up caching
 stack = Faraday::Builder.new do |builder|
+  # Enable log when debugging
   #builder.response :logger
-  builder.use Faraday::HttpCache, store: :mem_cache_store, store_options: ['localhost:11211']
+  # Do not use Memcache at the moment (should not be needed as we want to refresh every time / day)
+  #builder.use Faraday::HttpCache, store: :mem_cache_store, store_options: ['localhost:11211']
   builder.use Octokit::Response::RaiseError
   builder.adapter Faraday.default_adapter
 end
