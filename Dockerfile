@@ -27,12 +27,8 @@ RUN apt-get update
 RUN apt-get -y install arangodb=1.4.3
 
 # Start arangodb, wait for it to start, create database, stop it, wait for it to stop
-RUN echo -e "#/bin/bash\n" 'while : ; do bash -c "echo >/dev/tcp/localhost/8529" >/dev/null && break || sleep 1; done;' >/usr/local/bin/wait_for_arangodb && \
+RUN echo "#/bin/bash\n" 'while : ; do bash -c "echo >/dev/tcp/localhost/8529" >/dev/null && break || sleep 1; done;' >/usr/local/bin/wait_for_arangodb && \
     chmod u+x /usr/local/bin/wait_for_arangodb
-RUN /etc/init.d/arangodb start && \
-    wait_for_arangodb && \
-    arangosh --javascript.execute-string "db._createDatabase('stargazer')" && \
-    /etc/init.d/arangodb stop && while pidof arangod; do sleep 1; done
 
 # Add cronjob
 RUN apt-get -y install cron
@@ -43,8 +39,11 @@ ADD . /docker/stargazer
 WORKDIR /docker/stargazer
 RUN PATH=$RUBY_PATH/bin:$PATH bundle install -j 4
 
-CMD /bin/bash -l -c "/etc/init.d/arangodb start && wait_for_arangodb && cron && RACK_ENV=production bundle exec ruby web.rb"
+CMD /bin/bash -l -c "/etc/init.d/arangodb start && \
+    wait_for_arangodb && \
+    arangosh --javascript.execute-string 'db._createDatabase(\"stargazer\")'; \ 
+    cron && \
+    RACK_ENV=production bundle exec ruby web.rb"
 EXPOSE 4567
 EXPOSE 8529
-VOLUME /var/lib/arangodb/databases
 VOLUME /docker/stargazer/log
