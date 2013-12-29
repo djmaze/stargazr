@@ -1,5 +1,7 @@
 ## Configuration
 
+Copy _.env.development.sample_ to _.env.development_. Adjust it to your needs.
+
 In order to get by the anonymous Github API usage limit (recommended):
 
 * Get a personal access token for the app from [the application settings at Github](https://github.com/settings/applications). 

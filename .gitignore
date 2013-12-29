@@ -1,2 +1,4 @@
 log/*.log
 tags
+.env.development
+.env.production
