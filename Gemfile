@@ -7,6 +7,7 @@ gem 'rack_csrf'
 
 # Github API w/ caching
 gem 'octokit'
+gem 'sinatra_auth_github'
 gem 'faraday-http-cache'
 gem 'dalli'
 

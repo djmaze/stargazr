@@ -21,7 +21,8 @@ Octokit.middleware = stack
 
 # Login
 Octokit.configure do |c|
-  c.access_token = ENV['GITHUB_ACCESS_TOKEN'].presence
+  c.client_id     = ENV['GITHUB_CLIENT_ID']
+  c.client_secret = ENV['GITHUB_CLIENT_SECRET']
 end
 
 # Iterate through users

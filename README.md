@@ -1,11 +1,9 @@
 ## Configuration
 
-Copy _.env.development.sample_ to _.env.development_. Adjust it to your needs.
+* Copy _.env.development.sample_ to _.env.development_. Adjust the mail settings.
+* Register a new developer application in  [the application settings at Github](https://github.com/settings/applications). Put the client id and secret in your _.env_ file.
 
-In order to get by the anonymous Github API usage limit (recommended):
-
-* Get a personal access token for the app from [the application settings at Github](https://github.com/settings/applications). 
-* Put it in your _.env_ file, at `GITHUB_ACCESS_TOKEN`.
+Production works accordingly, with _.env.production_.
 
 ## Testing email
 

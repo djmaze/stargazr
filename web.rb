@@ -10,21 +10,29 @@ configure do
   use Rack::Csrf, :raise => true
 
   set :public_folder, Proc.new { File.join(root, "static") }
+
+  register Sinatra::Auth::Github
 end
 
+set :github_options, {
+  scopes:       'user:email',
+  secret:       ENV['GITHUB_CLIENT_SECRET'],
+  client_id:    ENV['GITHUB_CLIENT_ID'],
+}
 
 get '/' do
   @flash = session.delete(:flash)
   slim :signup
 end
 
-post '/signup' do
-  username, email = params.values_at :username, :email
+get '/signup_with_github' do
+  authenticate!
+  username, email = github_user.login, github_user.email || github_user.api.emails.first  # FIXME: Let user choose which email to use (if he has more than one associated)
   redirect_back_with_error('missing_input') and return unless username.present? && email.present?
   redirect_back_with_error('already_registered') and return if UsersCollection.by_example(username: username).any?
 
-  user = User.new username: params[:username], email: params[:email]
-  UsersCollection.save user
+  @user = User.new username: username, email: email
+  UsersCollection.save @user
   slim :signed_up
 end
 

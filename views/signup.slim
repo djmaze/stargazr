@@ -1,15 +1,12 @@
 #signup-form
   h1 Stargazer
-  p Sign up to get notified when there are new releases in your starred repositories.
-  form method="post" action="/signup"
-    == csrf_tag
-    .form-group class=(@flash == 'missing_input' && 'has-error')
-      label for="username"
-        | Github username:
-      input type="text" name="username" class="form-control"
-    .form-group
-      label for="email" 
-        | Email address for notifications:
-      input type="text" name="email" class="form-control"
-    .form-group
-      input type="submit" value="Sign up" class="btn btn-primary btn-lg"
+  p Get notified when there are new releases in your starred repositories.
+  form method="get" action="/signup_with_github"
+    .form_group
+      input type="submit" value="Sign up with Github" class="btn btn-primary btn-lg"
+
+#disclaimer.small
+  h3 Disclaimer
+  ul
+    li We will send you daily digests to your Github email address, provided something happened.
+    li This is a privately-run, not-for-profit service. No Spam, swear!
