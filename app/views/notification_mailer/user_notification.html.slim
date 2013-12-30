@@ -20,7 +20,7 @@ html
       p Stargazer
       p
       p 
-        | (Sorry, no one-click opt-out yet.
-        a href="mailto:#{ENV['UNSUBSCRIBE_EMAIL']}?subject=Unsubscribe #{user['username']}" 
-        | Send a mail with your username to #{ENV['UNSUBSCRIBE_EMAIL']}
-        | )
+        | [
+        a href="#{ENV['WEBSITE_URL']}/cancel" Cancel further notifications
+        | ]
+       
