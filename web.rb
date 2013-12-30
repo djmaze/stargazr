@@ -36,29 +36,23 @@ get '/signup_with_github' do
   slim :signed_up
 end
 
-get '/cancel/:username' do
-  return unless get_user_or_redirect
+get '/cancel' do
+  authenticate!
 
   slim :confirm_subscription_cancellation
 end
 
-post '/cancel/:username' do
-  return unless user = get_user_or_redirect
+post '/cancel' do
+  authenticate!
 
-  UsersCollection.delete user
+  user = UsersCollection.by_example(username: github_user.login).first
+  UsersCollection.delete user if user
   slim :subscription_cancelled
 end
 
 def redirect_back_with_error(message)
   session[:flash] = message
   redirect to '/'
-end
-
-def get_user_or_redirect
-  user = UsersCollection.by_example(username: params[:username]).first
-  redirect_back_with_error('not_registered') and return false unless user.present?
-
-  user
 end
 
 helpers do
