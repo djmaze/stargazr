@@ -1,5 +1,5 @@
-# Build: docker build -t stargazer .
-# Run: docker run -p 4567:4567 -d stargazer
+# Build: docker build -t stargazr .
+# Run: docker run -p 4567:4567 -d stargazr
 FROM ubuntu
 
 RUN sed -i "s/main/main universe/" /etc/apt/sources.list
@@ -32,11 +32,11 @@ RUN echo "#/bin/bash\n" 'while : ; do bash -c "echo >/dev/tcp/localhost/8529" >/
 
 # Add cronjob
 RUN apt-get -y install cron
-RUN echo "HOME=/docker/stargazer\nPATH=$RUBY_PATH/bin:$PATH\n\n@daily /bin/bash -l -c 'RACK_ENV=production bundle exec ruby notifier.rb >>log/notifier.log 2>&1'" | crontab -
+RUN echo "HOME=/docker/stargazr\nPATH=$RUBY_PATH/bin:$PATH\n\n@daily /bin/bash -l -c 'RACK_ENV=production bundle exec ruby notifier.rb >>log/notifier.log 2>&1'" | crontab -
 
 # Install project
-ADD . /docker/stargazer
-WORKDIR /docker/stargazer
+ADD . /docker/stargazr
+WORKDIR /docker/stargazr
 RUN PATH=$RUBY_PATH/bin:$PATH bundle install -j 4
 
 CMD /bin/bash -l -c "/etc/init.d/arangodb start && \
@@ -46,4 +46,4 @@ CMD /bin/bash -l -c "/etc/init.d/arangodb start && \
     RACK_ENV=production bundle exec ruby web.rb"
 EXPOSE 4567
 EXPOSE 8529
-VOLUME /docker/stargazer/log
+VOLUME /docker/stargazr/log
