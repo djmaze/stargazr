@@ -34,10 +34,14 @@ RUN echo "#/bin/bash\n" 'while : ; do bash -c "echo >/dev/tcp/localhost/8529" >/
 RUN apt-get -y install cron
 RUN echo "HOME=/docker/stargazr\nPATH=$RUBY_PATH/bin:$PATH\n\n@daily /bin/bash -l -c 'RACK_ENV=production bundle exec ruby notifier.rb >>log/notifier.log 2>&1'" | crontab -
 
-# Install project
-ADD . /docker/stargazr
+# Add Gemfile and bundle
 WORKDIR /docker/stargazr
+ADD Gemfile Gemfile
+ADD Gemfile.lock Gemfile.lock
 RUN PATH=$RUBY_PATH/bin:$PATH bundle install -j 4
+
+# Add project
+ADD . /docker/stargazr
 
 CMD /bin/bash -l -c "/etc/init.d/arangodb start && \
     wait_for_arangodb && \
