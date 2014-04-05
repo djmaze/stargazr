@@ -1,4 +1,4 @@
-# Build: docker build -t stargazr .
+ # Build: docker build -t stargazr .
 # Run: docker run -p 4567:4567 -d stargazr
 FROM ubuntu
 
@@ -15,7 +15,7 @@ RUN cd ruby-build && ./install.sh
 
 # Install Ruby & bundler
 ENV RUBY_VERSION 2.0.0-p247
-ENV RUBY_PATH /usr/local/ruby-$RUBY_VERSION 
+ENV RUBY_PATH /usr/local/ruby-$RUBY_VERSION
 RUN ruby-build $RUBY_VERSION $RUBY_PATH
 RUN $RUBY_PATH/bin/gem install bundler --pre --no-ri --no-rdoc
 RUN echo "export PATH=$RUBY_PATH/bin:$PATH" >/.bash_profile
@@ -24,7 +24,7 @@ RUN echo "export PATH=$RUBY_PATH/bin:$PATH" >/.bash_profile
 RUN echo 'deb http://www.arangodb.org/repositories/arangodb/xUbuntu_12.04/ /' >> /etc/apt/sources.list.d/arangodb.list
 RUN wget -qO- http://www.arangodb.org/repositories/arangodb/xUbuntu_12.04/Release.key | apt-key add -
 RUN apt-get update
-RUN apt-get -y install arangodb=1.4.3
+RUN apt-get -y install arangodb=1.4.13
 
 # Start arangodb, wait for it to start, create database, stop it, wait for it to stop
 RUN echo "#/bin/bash\n" 'while : ; do bash -c "echo >/dev/tcp/localhost/8529" >/dev/null && break || sleep 1; done;' >/usr/local/bin/wait_for_arangodb && \
@@ -45,7 +45,7 @@ ADD . /docker/stargazr
 
 CMD /bin/bash -l -c "/etc/init.d/arangodb start && \
     wait_for_arangodb && \
-    arangosh --javascript.execute-string 'db._createDatabase(\"stargazer\")'; \ 
+    arangosh --javascript.execute-string 'db._createDatabase(\"stargazer\")'; \
     cron && \
     RACK_ENV=production bundle exec ruby web.rb"
 EXPOSE 4567

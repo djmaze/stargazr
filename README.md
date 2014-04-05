@@ -1,7 +1,7 @@
 ## Prerequisites
 
 * Ruby 2.0 with bundler installed
-* [ArangoDB](http://www.arangodb.org/) running locally (at port 8529)
+* [ArangoDB](http://www.arangodb.org/) 1.4 running locally (at port 8529)
 
 ## Configuration
 
