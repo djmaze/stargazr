@@ -1,6 +1,6 @@
  # Build: docker build -t stargazr .
 # Run: docker run -p 4567:4567 -d stargazr
-FROM ubuntu
+FROM ubuntu:12.04
 
 RUN sed -i "s/main/main universe/" /etc/apt/sources.list
 RUN apt-get update
