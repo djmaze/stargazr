@@ -1,4 +1,5 @@
 log/*.log
 tags
+.docker_volumes
 .env.development
 .env.production
