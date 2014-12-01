@@ -21,11 +21,11 @@ RUN $RUBY_PATH/bin/gem install bundler --pre --no-ri --no-rdoc
 RUN echo "export PATH=$RUBY_PATH/bin:$PATH" >/.bash_profile
 
 # Install arangodb
-RUN echo 'deb http://www.arangodb.org/repositories/arangodb/xUbuntu_12.04/ /' >> /etc/apt/sources.list.d/arangodb.list
-RUN wget -qO- http://www.arangodb.org/repositories/arangodb/xUbuntu_12.04/Release.key | apt-key add -
+RUN apt-get install -y libicu48 curl
 ENV ARANGODB_VERSION 1.4.13
-RUN apt-get update
-RUN apt-get -y install arangodb=$ARANGODB_VERSION
+RUN curl -L -o arangodb_amd64.deb http://www.arangodb.org/repositories/arangodb/xUbuntu_12.04/amd64/arangodb_${ARANGODB_VERSION}_amd64.deb && \
+    dpkg -i arangodb_amd64.deb && \
+    rm arangodb_amd64.deb
 
 # Start arangodb, wait for it to start, create database, stop it, wait for it to stop
 RUN echo "#/bin/bash\n" 'while : ; do bash -c "echo >/dev/tcp/localhost/8529" >/dev/null && break || sleep 1; done;' >/usr/local/bin/wait_for_arangodb && \
