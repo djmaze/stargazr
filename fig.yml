@@ -1,0 +1,7 @@
+app:
+  build: .
+  ports:
+    - 4567:4567
+  volumes:
+    - .:/docker/stargazr
+    - .docker_volumes/stargazer/arangodb_databases:/var/lib/arangodb/databases
