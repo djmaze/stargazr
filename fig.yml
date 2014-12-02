@@ -2,6 +2,15 @@ app:
   build: .
   ports:
     - 4567:4567
+  links:
+    - arangodb
   volumes:
-    - .:/docker/stargazr
+    - .:/usr/src/app
+  environment:
+    RACK_ENV: development
+arangodb:
+  image: mazzolino/arangodb:2.0.6
+  environment:
+    DATABASE_NAME: stargazer
+  volumes:
     - .docker_volumes/stargazer/arangodb_databases:/var/lib/arangodb/databases
