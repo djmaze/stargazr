@@ -27,7 +27,7 @@ end
 
 get '/signup_with_github' do
   authenticate!
-  username, email = github_user.login, github_user.email || github_user.api.emails.first  # FIXME: Let user choose which email to use (if he has more than one associated)
+  username, email = github_user.login, github_user.email.presence || github_user.api.emails.first  # FIXME: Let user choose which email to use (if he has more than one associated)
   redirect_back_with_error('missing_input') and return unless username.present? && email.present?
   redirect_back_with_error('already_registered') and return if UsersCollection.by_example(username: username).any?
 
