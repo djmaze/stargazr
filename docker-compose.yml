@@ -23,4 +23,4 @@ arangodb:
   environment:
     DATABASE_NAME: stargazer
   volumes:
-    - .docker_volumes/stargazer/arangodb_databases:/var/lib/arangodb/databases
+    - .docker_volumes/arangodb_databases:/var/lib/arangodb/databases
