@@ -24,4 +24,4 @@ RUN bundle install --system -j 4
 ADD . /usr/src/app
 
 EXPOSE 4567
-VOLUME /usr/src/myapp/log
+VOLUME /usr/src/app/log
