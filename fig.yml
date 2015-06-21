@@ -1,4 +1,4 @@
-app:
+web:
   build: .
   ports:
     - 4567:4567
@@ -8,6 +8,16 @@ app:
     - .:/usr/src/app
   environment:
     RACK_ENV: development
+  command: ["bundle", "exec", "ruby", "web.rb", "-o", "0.0.0.0"]
+notifier:
+  build: .
+  links:
+    - arangodb
+  volumes:
+    - .:/usr/src/app
+  environment:
+    RACK_ENV: development
+  command: ["go-cron", "-s", "@daily", "--", "bundle", "exec", "ruby", "notifier.rb"]
 arangodb:
   image: mazzolino/arangodb:2.0.9
   environment:

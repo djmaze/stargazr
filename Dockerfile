@@ -9,9 +9,10 @@ RUN apt-get -y install locales && \
     echo C.UTF-8 UTF-8 >/etc/locale.gen && \
     locale-gen
 
-# Add cronjob
-RUN apt-get -y install cron
-RUN echo "HOME=/usr/src/myapp\nPATH=$RUBY_PATH/bin:$PATH\n\n@daily /bin/bash -l -c 'RACK_ENV=production bundle exec ruby notifier.rb >>log/notifier.log 2>&1'" | crontab -
+# Add go-cron
+RUN curl -L --insecure https://github.com/odise/go-cron/releases/download/v0.0.7/go-cron-linux.gz \
+  | zcat >/usr/local/bin/go-cron \
+ && chmod u+x /usr/local/bin/go-cron
 
 # Bundle
 WORKDIR /usr/src/app
@@ -22,6 +23,5 @@ RUN bundle install --system -j 4
 # Add project
 ADD . /usr/src/app
 
-CMD /bin/bash -c "cron && bundle exec ruby web.rb -o 0.0.0.0"
 EXPOSE 4567
 VOLUME /usr/src/myapp/log
