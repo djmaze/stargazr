@@ -9,7 +9,7 @@ app:
   environment:
     RACK_ENV: development
 arangodb:
-  image: mazzolino/arangodb:2.0.6
+  image: mazzolino/arangodb:2.0.9
   environment:
     DATABASE_NAME: stargazer
   volumes:
