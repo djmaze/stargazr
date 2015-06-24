@@ -7,7 +7,7 @@ web:
   volumes:
     - .:/usr/src/app
   environment:
-    RACK_ENV: development
+    RACK_ENV:
   command: ["bundle", "exec", "ruby", "web.rb", "-o", "0.0.0.0"]
 notifier:
   build: .
@@ -16,7 +16,7 @@ notifier:
   volumes:
     - .:/usr/src/app
   environment:
-    RACK_ENV: development
+    RACK_ENV:
   command: ["go-cron", "-s", "@daily", "--", "bundle", "exec", "ruby", "notifier.rb"]
 arangodb:
   image: mazzolino/arangodb:2.0.9

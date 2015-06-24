@@ -3,7 +3,7 @@ require 'active_support/core_ext/string'
 require 'pry'
 require 'guacamole'
 
-ENV['RACK_ENV'] ||= 'development'
+ENV['RACK_ENV'] = 'development' unless ENV['RACK_ENV'].present?
 Bundler.require(:default, :development)
 Dotenv.load ".env.#{ENV['RACK_ENV']}"
 
