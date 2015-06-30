@@ -1,10 +1,10 @@
 development: &development
   protocol: 'http'
-  host: 'localhost'
-  port: 8529
+  host: <%= ENV['ARANGODB_1_PORT_8529_TCP_ADDR'] || 'localhost' %>
+  port: <%= ENV['ARANGODB_1_PORT_8529_TCP_PORT'] || 8529 %>
   password: ''
   username: ''
-  database: 'stargazer'
+  database: <%= ENV['ARANGODB_DATABASE_NAME'] || 'stargazer' %>
 
 production:
   <<: *development

@@ -3,7 +3,7 @@ require 'active_support/core_ext/string'
 require 'pry'
 require 'guacamole'
 
-ENV['RACK_ENV'] ||= 'development'
+ENV['RACK_ENV'] = 'development' unless ENV['RACK_ENV'].present?
 Bundler.require(:default, :development)
 Dotenv.load ".env.#{ENV['RACK_ENV']}"
 
@@ -39,7 +39,9 @@ Guacamole.configure do |config|
   logger.level = 1
   config.logger = logger
 
-  config.load File.join(File.dirname(__FILE__), 'config', 'guacamole.yml')
+  config_filename = File.join(File.dirname(__FILE__), 'config', 'guacamole.yml')
+  File.open('/tmp/guacamole.yml', 'w') { |f| f.write ERB.new(File.read(config_filename)).result }
+  config.load '/tmp/guacamole.yml'
 end
 
 $:.unshift 'app/models'
