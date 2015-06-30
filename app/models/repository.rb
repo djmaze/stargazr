@@ -25,7 +25,7 @@ class Repository
 
   def new_tag_since?(time)
     return false unless time.present?
-    latest_tag_date.try :>=, time
+    latest_tag_date.try :>=, time.beginning_of_day
   end
 
   def fresh?
